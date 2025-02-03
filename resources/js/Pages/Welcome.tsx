@@ -1,20 +1,15 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
-import Navbar from '@/Components/Navbar';
-import Footer from '@/Components/Footer';
+import MainLayout from '@/Layouts/MainLayout';
 import Home from './Home';
 
 export default function Welcome() {
   return (
-    <>
+    <MainLayout>
       <Head title="Welcome" />
-      <div className="min-h-screen bg-white">
-        <Navbar />
-        <main>
-          <Home />
-        </main>
-        <Footer />
-      </div>
-    </>
+      <main>
+        <Home />
+      </main>
+    </MainLayout>
   );
 }
