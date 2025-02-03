@@ -13,7 +13,7 @@ export default function Navbar() {
             <Link href="/" className="flex-shrink-0">
               <div className="flex items-center gap-2 text-gold">
                 <Plane className="h-8 w-8" />
-                <span className="font-playfair text-xl font-semibold">Oceania Airlines</span>
+                <span className="font-playfair text-xl font-semibold">Oceania Jets</span>
               </div>
             </Link>
           </div>

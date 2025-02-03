@@ -10,7 +10,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 text-gold mb-4">
               <Plane className="h-8 w-8" />
-              <span className="font-playfair text-xl font-semibold">Oceania Airlines</span>
+              <span className="font-playfair text-xl font-semibold">Oceania Jets</span>
             </div>
             <p className="text-white/80">
               Where Luxury Meets the Sky - Experience ultimate private aviation.
@@ -65,7 +65,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 text-center text-white/60">
-          <p>© {new Date().getFullYear()} Oceania Airlines. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Oceania Jets. All rights reserved.</p>
         </div>
       </div>
     </footer>

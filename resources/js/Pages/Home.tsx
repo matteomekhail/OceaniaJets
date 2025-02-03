@@ -1,5 +1,6 @@
 import React from 'react';
 import { Shield, Award, Clock, Star, Users, Plane, MapPin, HeartHandshake } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 import Hero from '../Components/Hero';
 import FleetPreview from '../Components/FleetPreview';
 import Destinations from '../Components/Destinations';
@@ -43,7 +44,7 @@ export default function Home() {
       {/* Services Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="section-title text-center">Why Choose Oceania Airlines</h2>
+          <h2 className="section-title text-center">Why Choose Oceania Jets</h2>
           <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
             Experience unparalleled private aviation with our premium services and dedication to excellence.
           </p>
@@ -131,13 +132,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-playfair font-semibold mb-6">Ready to Experience Luxury Travel?</h2>
           <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            Join our exclusive clientele and elevate your travel experience with Oceania Airlines.
+            Join our exclusive clientele and elevate your travel experience with Oceania Jets.
           </p>
           <div className="flex justify-center gap-4">
-            <button className="btn-primary">Request Quote</button>
-            <button className="bg-transparent border-2 border-gold text-gold hover:bg-gold/10 px-6 py-3 rounded-md font-medium transition-all duration-300">
+            <Link href="/request-quote" className="btn-primary">
+              Request Quote
+            </Link>
+            <Link href="/contact" className="bg-transparent border-2 border-gold text-gold hover:bg-gold/10 px-6 py-3 rounded-md font-medium transition-all duration-300">
               Contact Us
-            </button>
+            </Link>
           </div>
         </div>
       </section>

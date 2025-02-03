@@ -34,7 +34,7 @@ export default function About() {
         {/* Hero Section */}
         <div className="bg-navy text-white py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-5xl font-playfair font-semibold mb-6">About Oceania Airlines</h1>
+            <h1 className="text-5xl font-playfair font-semibold mb-6">About Oceania Jets</h1>
             <p className="text-xl text-white/90 max-w-3xl">
               Setting new standards in private aviation across the Pacific region since 1970.
             </p>
@@ -48,7 +48,7 @@ export default function About() {
               <div>
                 <h2 className="section-title">Our Story</h2>
                 <p className="text-gray-600 mb-6">
-                  Founded in 1970, Oceania Airlines has been at the forefront of private aviation
+                  Founded in 1970, Oceania Jets has been at the forefront of private aviation
                   in the Pacific region for over five decades. What started as a small charter
                   service has grown into the region's premier private jet provider.
                 </p>
@@ -66,7 +66,7 @@ export default function About() {
               <div className="relative">
                 <img
                   src="https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&fit=crop&q=80&w=800"
-                  alt="Oceania Airlines History"
+                  alt="Oceania Jets History"
                   className="rounded-lg shadow-lg"
                 />
               </div>

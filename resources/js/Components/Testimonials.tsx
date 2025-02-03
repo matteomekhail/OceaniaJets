@@ -4,13 +4,13 @@ const testimonials = [
   {
     name: 'James Wilson',
     role: 'CEO, Pacific Ventures',
-    content: 'Oceania Airlines has redefined luxury travel for me. Their attention to detail and professional service is unmatched.',
+    content: 'Oceania Jets has redefined luxury travel for me. Their attention to detail and professional service is unmatched.',
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200',
   },
   {
     name: 'Sarah Chen',
     role: 'Executive Director',
-    content: 'The flexibility and comfort provided by Oceania Airlines make every business trip a pleasure.',
+    content: 'The flexibility and comfort provided by Oceania Jets make every business trip a pleasure.',
     image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200',
   },
 ];
