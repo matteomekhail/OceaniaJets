@@ -6,12 +6,27 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return Inertia::render('Welcome');
+});
+
+Route::get('/fleet', function () {
+    return Inertia::render('Fleet');
+});
+
+Route::get('/destinations', function () {
+    return Inertia::render('Destinations');
+});
+
+Route::get('/about', function () {
+    return Inertia::render('About');
+});
+
+Route::get('/contact', function () {
+    return Inertia::render('Contact');
+});
+
+Route::get('/request-quote', function () {
+    return Inertia::render('RequestQuote');
 });
 
 Route::get('/dashboard', function () {

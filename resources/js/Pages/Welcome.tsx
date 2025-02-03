@@ -2,7 +2,7 @@ import React from 'react';
 import { Head } from '@inertiajs/react';
 import Navbar from '@/Components/Navbar';
 import Footer from '@/Components/Footer';
-import Hero from '@/Components/Hero';
+import Home from './Home';
 
 export default function Welcome() {
   return (
@@ -11,7 +11,7 @@ export default function Welcome() {
       <div className="min-h-screen bg-white">
         <Navbar />
         <main>
-          <Hero />
+          <Home />
         </main>
         <Footer />
       </div>
