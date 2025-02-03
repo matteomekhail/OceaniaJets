@@ -1,12 +1,20 @@
+import React from 'react';
 import { Head } from '@inertiajs/react';
+import Navbar from '@/Components/Navbar';
+import Footer from '@/Components/Footer';
+import Hero from '@/Components/Hero';
 
 export default function Welcome() {
-    return (
-        <>
-            <Head />
-            <div className="flex flex-col items-center justify-center h-screen">
-                <h1 className="text-4xl font-bold">Welcome to the app!</h1>
-            </div>
-        </>
-    );
+  return (
+    <>
+      <Head title="Welcome" />
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <main>
+          <Hero />
+        </main>
+        <Footer />
+      </div>
+    </>
+  );
 }
