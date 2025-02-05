@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, router } from '@inertiajs/react';
 
 const fleetData = [
   {
@@ -39,8 +40,13 @@ export default function FleetPreview() {
               <div className="absolute inset-0 bg-gradient-to-t from-navy/90 to-transparent flex flex-col justify-end p-6">
                 <h3 className="text-2xl font-playfair text-white mb-2">{item.category}</h3>
                 <p className="text-white/90 mb-4">{item.description}</p>
-                <button className="text-gold hover:text-white transition-colors duration-300">
-                  Learn More →
+                <button
+                  onClick={() => router.visit('/request-quote', {
+                    data: { jetCategory: item.category }
+                  })}
+                  className="text-gold hover:text-white transition-colors duration-300 inline-block cursor-pointer"
+                >
+                  Request Quote →
                 </button>
               </div>
             </div>

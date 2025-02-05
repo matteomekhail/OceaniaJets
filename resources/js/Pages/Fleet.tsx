@@ -2,6 +2,7 @@ import React from 'react';
 import { Shield, Users, Gauge, Clock } from 'lucide-react';
 import { Head } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
+import { router } from '@inertiajs/react';
 
 const fleetCategories = [
   {
@@ -152,8 +153,14 @@ export default function Fleet() {
                           ))}
                         </ul>
                       </div>
-
-                      <button className="btn-primary mt-8">Request Quote</button>
+                      <button 
+                        onClick={() => router.visit('/request-quote', {
+                          data: { jetModel: model.name, jetCategory: category.name }
+                        })}
+                        className="btn-primary mt-8"
+                      >
+                        Request Quote
+                      </button>
                     </div>
                   </div>
                 </div>
