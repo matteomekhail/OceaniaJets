@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, ChevronRight, Plane, Users } from 'lucide-react';
-import { router } from '@inertiajs/react';
+import { router, Link } from '@inertiajs/react';
 import { toast } from 'react-hot-toast';
 
 interface Airport {
@@ -212,19 +212,19 @@ const Hero: React.FC = () => {
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center items-center">
-              <button 
-                type="button"
+              <Link 
+                href="/request-quote"
                 className="group px-8 py-4 bg-gold hover:bg-gold/90 text-navy font-montserrat font-semibold rounded-full transition-all hover:shadow-lg hover:shadow-gold/20 flex items-center gap-2"
               >
                 Book Your Flight 
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button 
-                type="button"
+              </Link>
+              <Link 
+                href="/about"
                 className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-montserrat font-semibold rounded-full backdrop-blur-sm transition-all border border-white/20"
               >
                 Learn More
-              </button>
+              </Link>
             </div>
           </div>
 
