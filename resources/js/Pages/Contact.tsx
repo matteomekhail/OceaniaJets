@@ -1,9 +1,31 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
-import { Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
+import { toast } from 'react-hot-toast';
 
 export default function Contact() {
+  const { data, setData, post, processing, errors, reset } = useForm({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    message: '',
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    post('/contact', {
+      onSuccess: () => {
+        reset();
+        toast.success('Message sent successfully!');
+      },
+      onError: () => {
+        toast.error('Failed to send message. Please try again.');
+      },
+    });
+  };
+
   return (
     <MainLayout>
       <Head title="Contact" />
@@ -25,7 +47,7 @@ export default function Contact() {
               {/* Contact Form */}
               <div>
                 <h2 className="text-3xl font-playfair text-navy mb-8">Send Us a Message</h2>
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -33,8 +55,13 @@ export default function Contact() {
                       </label>
                       <input
                         type="text"
+                        value={data.firstName}
+                        onChange={e => setData('firstName', e.target.value)}
                         className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
                       />
+                      {errors.firstName && (
+                        <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -42,8 +69,13 @@ export default function Contact() {
                       </label>
                       <input
                         type="text"
+                        value={data.lastName}
+                        onChange={e => setData('lastName', e.target.value)}
                         className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
                       />
+                      {errors.lastName && (
+                        <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -52,8 +84,13 @@ export default function Contact() {
                     </label>
                     <input
                       type="email"
+                      value={data.email}
+                      onChange={e => setData('email', e.target.value)}
                       className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -61,8 +98,13 @@ export default function Contact() {
                     </label>
                     <input
                       type="tel"
+                      value={data.phone}
+                      onChange={e => setData('phone', e.target.value)}
                       className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
                     />
+                    {errors.phone && (
+                      <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -70,11 +112,20 @@ export default function Contact() {
                     </label>
                     <textarea
                       rows={6}
+                      value={data.message}
+                      onChange={e => setData('message', e.target.value)}
                       className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
                     ></textarea>
+                    {errors.message && (
+                      <p className="mt-1 text-sm text-red-600">{errors.message}</p>
+                    )}
                   </div>
-                  <button type="submit" className="btn-primary w-full">
-                    Send Message
+                  <button
+                    type="submit"
+                    disabled={processing}
+                    className="btn-primary w-full disabled:opacity-50"
+                  >
+                    {processing ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
               </div>

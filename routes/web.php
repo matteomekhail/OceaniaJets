@@ -42,4 +42,6 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/quote-request', [QuoteController::class, 'sendQuote']);
 
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');
+
 require __DIR__.'/auth.php';
