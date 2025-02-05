@@ -28,6 +28,11 @@
             font-size: 12px;
             color: #666;
         }
+        .section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
@@ -37,13 +42,62 @@
         </div>
         
         <div class="content">
-            <h2>Quote Details:</h2>
-            
-            <p><strong>From:</strong> {{ $quoteData['from'] }}</p>
-            <p><strong>To:</strong> {{ $quoteData['to'] }}</p>
-            <p><strong>Number of Passengers:</strong> {{ $quoteData['passengers'] }}</p>
-            
-            <p>A new quote request has been submitted through the Oceania Jets website. Please review the details above and respond to the customer as soon as possible.</p>
+            <div class="section">
+                <h2>Trip Details:</h2>
+                <p><strong>From:</strong> {{ $quoteData['from'] }}</p>
+                <p><strong>To:</strong> {{ $quoteData['to'] }}</p>
+                <p><strong>Number of Passengers:</strong> {{ $quoteData['passengers'] }}</p>
+                
+                @if(isset($quoteData['tripType']))
+                    <p><strong>Trip Type:</strong> {{ $quoteData['tripType'] }}</p>
+                @endif
+                
+                @if(isset($quoteData['departureDate']))
+                    <p><strong>Departure Date:</strong> {{ $quoteData['departureDate'] }}</p>
+                @endif
+                
+                @if(isset($quoteData['departureTime']))
+                    <p><strong>Departure Time:</strong> {{ $quoteData['departureTime'] }}</p>
+                @endif
+                
+                @if(isset($quoteData['returnDate']))
+                    <p><strong>Return Date:</strong> {{ $quoteData['returnDate'] }}</p>
+                @endif
+            </div>
+
+            @if(isset($quoteData['aircraftCategory']) || isset($quoteData['specialRequirements']))
+                <div class="section">
+                    <h2>Aircraft Preferences:</h2>
+                    @if(isset($quoteData['aircraftCategory']))
+                        <p><strong>Aircraft Category:</strong> {{ $quoteData['aircraftCategory'] }}</p>
+                    @endif
+                    @if(isset($quoteData['specialRequirements']))
+                        <p><strong>Special Requirements:</strong> {{ $quoteData['specialRequirements'] }}</p>
+                    @endif
+                </div>
+            @endif
+
+            @if(isset($quoteData['firstName']) || isset($quoteData['lastName']) || isset($quoteData['email']) || isset($quoteData['phone']))
+                <div class="section">
+                    <h2>Contact Information:</h2>
+                    @if(isset($quoteData['firstName']) && isset($quoteData['lastName']))
+                        <p><strong>Name:</strong> {{ $quoteData['firstName'] }} {{ $quoteData['lastName'] }}</p>
+                    @endif
+                    @if(isset($quoteData['email']))
+                        <p><strong>Email:</strong> {{ $quoteData['email'] }}</p>
+                    @endif
+                    @if(isset($quoteData['phone']))
+                        <p><strong>Phone:</strong> {{ $quoteData['phone'] }}</p>
+                    @endif
+                </div>
+            @endif
+
+            @if(isset($quoteData['additionalComments']))
+                <div class="section">
+                    <h2>Additional Comments:</h2>
+                    <p>{{ $quoteData['additionalComments'] }}</p>
+                </div>
+            @endif
         </div>
         
         <div class="footer">

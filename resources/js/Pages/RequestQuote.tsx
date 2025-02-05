@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Plane, Users, Calendar, MapPin } from 'lucide-react';
+import { router } from '@inertiajs/react';
+import { toast } from 'react-hot-toast';
 
 const steps = [
   { title: 'Trip Details', icon: Plane },
@@ -12,6 +14,149 @@ const steps = [
 
 export default function RequestQuote() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    tripType: 'One Way',
+    from: '',
+    to: '',
+    passengers: '',
+    aircraftCategory: '',
+    specialRequirements: '',
+    departureDate: '',
+    departureTime: '',
+    returnDate: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    additionalComments: '',
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const validateStep = (step: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    switch (step) {
+      case 0: // Trip Details
+        if (!formData.from) newErrors.from = 'Departure location is required';
+        else if (formData.from.length < 3) newErrors.from = 'Departure location must be at least 3 characters';
+        
+        if (!formData.to) newErrors.to = 'Destination location is required';
+        else if (formData.to.length < 3) newErrors.to = 'Destination location must be at least 3 characters';
+        break;
+
+      case 1: // Passenger Information
+        if (!formData.passengers) newErrors.passengers = 'Number of passengers is required';
+        if (!formData.aircraftCategory) newErrors.aircraftCategory = 'Please select an aircraft category';
+        break;
+
+      case 2: // Schedule
+        if (!formData.departureDate) {
+          newErrors.departureDate = 'Departure date is required';
+        } else {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const departureDate = new Date(formData.departureDate);
+          if (departureDate < today) {
+            newErrors.departureDate = 'Departure date must be today or later';
+          }
+        }
+
+        if (!formData.departureTime) {
+          newErrors.departureTime = 'Departure time is required';
+        }
+
+        if (formData.tripType === 'Round Trip') {
+          if (!formData.returnDate) {
+            newErrors.returnDate = 'Return date is required for round trips';
+          } else if (formData.departureDate) {
+            const departureDate = new Date(formData.departureDate);
+            const returnDate = new Date(formData.returnDate);
+            if (returnDate < departureDate) {
+              newErrors.returnDate = 'Return date must be after departure date';
+            }
+          }
+        }
+        break;
+
+      case 3: // Contact Information
+        if (!formData.firstName) newErrors.firstName = 'First name is required';
+        else if (formData.firstName.length < 2) newErrors.firstName = 'First name must be at least 2 characters';
+        
+        if (!formData.lastName) newErrors.lastName = 'Last name is required';
+        else if (formData.lastName.length < 2) newErrors.lastName = 'Last name must be at least 2 characters';
+        
+        if (!formData.email) newErrors.email = 'Email is required';
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+          newErrors.email = 'Please enter a valid email address';
+        }
+        
+        if (!formData.phone) newErrors.phone = 'Phone number is required';
+        else if (formData.phone.length < 8) newErrors.phone = 'Phone number must be at least 8 characters';
+        break;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
+    } else {
+      toast.error('Please fix the errors before proceeding');
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (isSubmitting) return;
+
+    if (!validateStep(currentStep)) {
+      toast.error('Please fix the errors before submitting');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    router.post('/quote-request', formData, {
+      onSuccess: () => {
+        toast.success('Quote request sent successfully! We will contact you soon.');
+        setIsSubmitting(false);
+        // Reset form
+        setFormData({
+          tripType: 'One Way',
+          from: '',
+          to: '',
+          passengers: '',
+          aircraftCategory: '',
+          specialRequirements: '',
+          departureDate: '',
+          departureTime: '',
+          returnDate: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          additionalComments: '',
+        });
+        setCurrentStep(0);
+        setErrors({});
+      },
+      onError: (errors) => {
+        setErrors(errors as Record<string, string>);
+        toast.error('Failed to send quote request. Please check the form for errors.');
+        setIsSubmitting(false);
+      }
+    });
+  };
 
   return (
     <MainLayout>
@@ -69,10 +214,14 @@ export default function RequestQuote() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Trip Type
                     </label>
-                    <select className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold">
+                    <select
+                      name="tripType"
+                      value={formData.tripType}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                    >
                       <option>One Way</option>
                       <option>Round Trip</option>
-                      <option>Multi-City</option>
                     </select>
                   </div>
                   <div>
@@ -81,8 +230,16 @@ export default function RequestQuote() {
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                      name="from"
+                      value={formData.from}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 rounded-md border ${
+                        errors.from ? 'border-red-500' : 'border-gray-300'
+                      } focus:outline-none focus:border-gold`}
                     />
+                    {errors.from && (
+                      <p className="text-red-500 text-sm mt-1">{errors.from}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -90,8 +247,16 @@ export default function RequestQuote() {
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                      name="to"
+                      value={formData.to}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 rounded-md border ${
+                        errors.to ? 'border-red-500' : 'border-gray-300'
+                      } focus:outline-none focus:border-gold`}
                     />
+                    {errors.to && (
+                      <p className="text-red-500 text-sm mt-1">{errors.to}</p>
+                    )}
                   </div>
                 </div>
               )}
@@ -105,15 +270,29 @@ export default function RequestQuote() {
                     </label>
                     <input
                       type="number"
+                      name="passengers"
+                      value={formData.passengers}
+                      onChange={handleInputChange}
                       min="1"
-                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                      className={`w-full px-4 py-3 rounded-md border ${
+                        errors.passengers ? 'border-red-500' : 'border-gray-300'
+                      } focus:outline-none focus:border-gold`}
                     />
+                    {errors.passengers && (
+                      <p className="text-red-500 text-sm mt-1">{errors.passengers}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Preferred Aircraft Category
                     </label>
-                    <select className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold">
+                    <select
+                      name="aircraftCategory"
+                      value={formData.aircraftCategory}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                    >
+                      <option value="">Select Category</option>
                       <option>Light Jet</option>
                       <option>Midsize Jet</option>
                       <option>Heavy Jet</option>
@@ -124,6 +303,9 @@ export default function RequestQuote() {
                       Special Requirements
                     </label>
                     <textarea
+                      name="specialRequirements"
+                      value={formData.specialRequirements}
+                      onChange={handleInputChange}
                       rows={4}
                       className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
                       placeholder="Catering preferences, special assistance, etc."
@@ -141,8 +323,16 @@ export default function RequestQuote() {
                     </label>
                     <input
                       type="date"
-                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                      name="departureDate"
+                      value={formData.departureDate}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 rounded-md border ${
+                        errors.departureDate ? 'border-red-500' : 'border-gray-300'
+                      } focus:outline-none focus:border-gold`}
                     />
+                    {errors.departureDate && (
+                      <p className="text-red-500 text-sm mt-1">{errors.departureDate}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -150,18 +340,31 @@ export default function RequestQuote() {
                     </label>
                     <input
                       type="time"
+                      name="departureTime"
+                      value={formData.departureTime}
+                      onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Return Date (if applicable)
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
-                    />
-                  </div>
+                  {formData.tripType === 'Round Trip' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Return Date
+                      </label>
+                      <input
+                        type="date"
+                        name="returnDate"
+                        value={formData.returnDate}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 rounded-md border ${
+                          errors.returnDate ? 'border-red-500' : 'border-gray-300'
+                        } focus:outline-none focus:border-gold`}
+                      />
+                      {errors.returnDate && (
+                        <p className="text-red-500 text-sm mt-1">{errors.returnDate}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -175,8 +378,16 @@ export default function RequestQuote() {
                       </label>
                       <input
                         type="text"
-                        className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 rounded-md border ${
+                          errors.firstName ? 'border-red-500' : 'border-gray-300'
+                        } focus:outline-none focus:border-gold`}
                       />
+                      {errors.firstName && (
+                        <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -184,8 +395,16 @@ export default function RequestQuote() {
                       </label>
                       <input
                         type="text"
-                        className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 rounded-md border ${
+                          errors.lastName ? 'border-red-500' : 'border-gray-300'
+                        } focus:outline-none focus:border-gold`}
                       />
+                      {errors.lastName && (
+                        <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -194,8 +413,16 @@ export default function RequestQuote() {
                     </label>
                     <input
                       type="email"
-                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 rounded-md border ${
+                        errors.email ? 'border-red-500' : 'border-gray-300'
+                      } focus:outline-none focus:border-gold`}
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -203,14 +430,25 @@ export default function RequestQuote() {
                     </label>
                     <input
                       type="tel"
-                      className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className={`w-full px-4 py-3 rounded-md border ${
+                        errors.phone ? 'border-red-500' : 'border-gray-300'
+                      } focus:outline-none focus:border-gold`}
                     />
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Additional Comments
                     </label>
                     <textarea
+                      name="additionalComments"
+                      value={formData.additionalComments}
+                      onChange={handleInputChange}
                       rows={4}
                       className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:border-gold"
                     ></textarea>
@@ -234,15 +472,19 @@ export default function RequestQuote() {
                 <button
                   onClick={() => {
                     if (currentStep === steps.length - 1) {
-                      // Submit form
-                      console.log('Submit form');
+                      handleSubmit();
                     } else {
-                      setCurrentStep(Math.min(steps.length - 1, currentStep + 1));
+                      handleNext();
                     }
                   }}
-                  className="btn-primary"
+                  disabled={isSubmitting}
+                  className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {currentStep === steps.length - 1 ? 'Submit Request' : 'Next'}
+                  {currentStep === steps.length - 1 ? (
+                    isSubmitting ? 'Submitting...' : 'Submit Request'
+                  ) : (
+                    'Next'
+                  )}
                 </button>
               </div>
             </div>

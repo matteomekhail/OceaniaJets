@@ -34,6 +34,7 @@ const Hero: React.FC = () => {
   const [showToDropdown, setShowToDropdown] = useState<boolean>(false);
   const [passengers, setPassengers] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const fromRef = useRef<HTMLDivElement>(null);
   const toRef = useRef<HTMLDivElement>(null);
@@ -130,11 +131,34 @@ const Hero: React.FC = () => {
     }
   };
 
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!fromQuery) {
+      newErrors.from = 'Departure location is required';
+    } else if (fromQuery.length < 3) {
+      newErrors.from = 'Departure location must be at least 3 characters';
+    }
+
+    if (!toQuery) {
+      newErrors.to = 'Destination location is required';
+    } else if (toQuery.length < 3) {
+      newErrors.to = 'Destination location must be at least 3 characters';
+    }
+
+    if (!passengers) {
+      newErrors.passengers = 'Number of passengers is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!fromQuery || !toQuery || !passengers) {
-      toast.error('Please fill in all fields');
+    if (!validateForm()) {
+      toast.error('Please fill in all fields correctly');
       return;
     }
 
@@ -151,10 +175,12 @@ const Hero: React.FC = () => {
         setFromQuery('');
         setToQuery('');
         setPassengers('');
+        setErrors({});
         setIsLoading(false);
       },
-      onError: () => {
-        toast.error('Failed to send quote request. Please try again.');
+      onError: (errors) => {
+        setErrors(errors as Record<string, string>);
+        toast.error('Failed to send quote request. Please check the form for errors.');
         setIsLoading(false);
       }
     });
@@ -215,9 +241,14 @@ const Hero: React.FC = () => {
                   onChange={(e) => handleInputChange(e, 'from')}
                   onFocus={() => setShowFromDropdown(true)}
                   placeholder="From"
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 border-transparent focus:border-gold/50 transition-all outline-none group-hover:bg-white/20 font-montserrat"
+                  className={`w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 ${
+                    errors.from ? 'border-red-500' : 'border-transparent'
+                  } focus:border-gold/50 transition-all outline-none group-hover:bg-white/20 font-montserrat`}
                   required
                 />
+                {errors.from && (
+                  <p className="absolute -bottom-6 left-0 text-red-500 text-sm">{errors.from}</p>
+                )}
                 {showFromDropdown && renderAirportDropdown(fromResults, 'from')}
               </div>
 
@@ -231,9 +262,14 @@ const Hero: React.FC = () => {
                   onChange={(e) => handleInputChange(e, 'to')}
                   onFocus={() => setShowToDropdown(true)}
                   placeholder="To"
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 border-transparent focus:border-gold/50 transition-all outline-none group-hover:bg-white/20 font-montserrat"
+                  className={`w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 ${
+                    errors.to ? 'border-red-500' : 'border-transparent'
+                  } focus:border-gold/50 transition-all outline-none group-hover:bg-white/20 font-montserrat`}
                   required
                 />
+                {errors.to && (
+                  <p className="absolute -bottom-6 left-0 text-red-500 text-sm">{errors.to}</p>
+                )}
                 {showToDropdown && renderAirportDropdown(toResults, 'to')}
               </div>
 
@@ -244,7 +280,9 @@ const Hero: React.FC = () => {
                 <select 
                   value={passengers}
                   onChange={(e) => setPassengers(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 border-transparent focus:border-gold/50 transition-all outline-none appearance-none group-hover:bg-white/20 font-montserrat"
+                  className={`w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 ${
+                    errors.passengers ? 'border-red-500' : 'border-transparent'
+                  } focus:border-gold/50 transition-all outline-none appearance-none group-hover:bg-white/20 font-montserrat`}
                   required
                 >
                   <option value="">Select Passengers</option>
@@ -253,6 +291,9 @@ const Hero: React.FC = () => {
                   <option value="7-10">7-10 Passengers</option>
                   <option value="11+">11+ Passengers</option>
                 </select>
+                {errors.passengers && (
+                  <p className="absolute -bottom-6 left-0 text-red-500 text-sm">{errors.passengers}</p>
+                )}
               </div>
 
               <button 
