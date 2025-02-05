@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, ChevronRight, Plane, Users } from 'lucide-react';
+import { router } from '@inertiajs/react';
+import { toast } from 'react-hot-toast';
 
 interface Airport {
   id: string;
@@ -30,6 +32,8 @@ const Hero: React.FC = () => {
   const [toResults, setToResults] = useState<Airport[]>([]);
   const [showFromDropdown, setShowFromDropdown] = useState<boolean>(false);
   const [showToDropdown, setShowToDropdown] = useState<boolean>(false);
+  const [passengers, setPassengers] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fromRef = useRef<HTMLDivElement>(null);
   const toRef = useRef<HTMLDivElement>(null);
@@ -126,6 +130,36 @@ const Hero: React.FC = () => {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!fromQuery || !toQuery || !passengers) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    setIsLoading(true);
+
+    router.post('/quote-request', {
+      from: fromQuery,
+      to: toQuery,
+      passengers: passengers,
+    }, {
+      onSuccess: () => {
+        toast.success('Quote request sent successfully! We will contact you soon.');
+        // Reset form
+        setFromQuery('');
+        setToQuery('');
+        setPassengers('');
+        setIsLoading(false);
+      },
+      onError: () => {
+        toast.error('Failed to send quote request. Please try again.');
+        setIsLoading(false);
+      }
+    });
+  };
+
   return (
     <div className="relative min-h-screen">
       {/* Hero Background */}
@@ -170,7 +204,7 @@ const Hero: React.FC = () => {
 
           {/* Search Form */}
           <div className="bg-navy/80 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-white/10">
-            <form className="grid grid-cols-1 md:grid-cols-4 gap-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="grid grid-cols-1 md:grid-cols-4 gap-6" onSubmit={handleSubmit}>
               <div className="relative group" ref={fromRef}>
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                   <Plane className="h-5 w-5 text-gold transition-colors" />
@@ -182,6 +216,7 @@ const Hero: React.FC = () => {
                   onFocus={() => setShowFromDropdown(true)}
                   placeholder="From"
                   className="w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 border-transparent focus:border-gold/50 transition-all outline-none group-hover:bg-white/20 font-montserrat"
+                  required
                 />
                 {showFromDropdown && renderAirportDropdown(fromResults, 'from')}
               </div>
@@ -197,6 +232,7 @@ const Hero: React.FC = () => {
                   onFocus={() => setShowToDropdown(true)}
                   placeholder="To"
                   className="w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 border-transparent focus:border-gold/50 transition-all outline-none group-hover:bg-white/20 font-montserrat"
+                  required
                 />
                 {showToDropdown && renderAirportDropdown(toResults, 'to')}
               </div>
@@ -205,8 +241,13 @@ const Hero: React.FC = () => {
                 <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                   <Users className="h-5 w-5 text-gold transition-colors" />
                 </div>
-                <select className="w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 border-transparent focus:border-gold/50 transition-all outline-none appearance-none group-hover:bg-white/20 font-montserrat">
-                  <option value="" disabled selected>Passengers</option>
+                <select 
+                  value={passengers}
+                  onChange={(e) => setPassengers(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-white/10 text-white placeholder-white/70 border-2 border-transparent focus:border-gold/50 transition-all outline-none appearance-none group-hover:bg-white/20 font-montserrat"
+                  required
+                >
+                  <option value="">Select Passengers</option>
                   <option value="1-3">1-3 Passengers</option>
                   <option value="4-6">4-6 Passengers</option>
                   <option value="7-10">7-10 Passengers</option>
@@ -216,10 +257,17 @@ const Hero: React.FC = () => {
 
               <button 
                 type="submit"
-                className="group bg-gold hover:bg-gold/90 text-navy font-montserrat font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-gold/20 flex items-center justify-center gap-2 py-4"
+                disabled={isLoading}
+                className="group bg-gold hover:bg-gold/90 text-navy font-montserrat font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-gold/20 flex items-center justify-center gap-2 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Get Instant Quote 
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                {isLoading ? (
+                  'Sending...'
+                ) : (
+                  <>
+                    Get Instant Quote 
+                    <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </button>
             </form>
           </div>
