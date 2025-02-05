@@ -20,22 +20,22 @@ export default function Navbar() {
     <nav className="fixed w-full z-50">
       {/* Header fisso */}
       <div className="bg-navy w-full">
-        <div className="px-6 flex items-center justify-between h-16">
+        <div className="px-6 flex items-center justify-between h-16 md:h-24">
           <Link href="/" className="flex-shrink-0">
             <div className="flex items-center gap-3 text-gold">
-              <Plane className="h-6 w-6" />
-              <span className="font-playfair text-lg">Oceania Jets</span>
+              <Plane className="h-6 w-6 md:h-8 md:w-8" />
+              <span className="font-playfair text-lg md:text-2xl">Oceania Jets</span>
             </div>
           </Link>
           
           <div className="hidden md:block">
             <div className="flex items-baseline space-x-8">
-              <Link href="/" className="nav-link font-montserrat font-medium text-base">Home</Link>
-              <Link href="/fleet" className="nav-link font-montserrat font-medium text-base">Fleet</Link>
-              <Link href="/destinations" className="nav-link font-montserrat font-medium text-base">Destinations</Link>
-              <Link href="/about" className="nav-link font-montserrat font-medium text-base">About</Link>
-              <Link href="/contact" className="nav-link font-montserrat font-medium text-base">Contact</Link>
-              <Link href="/request-quote" className="btn-primary">Request Quote</Link>
+              <Link href="/" className="nav-link font-montserrat font-medium text-lg">Home</Link>
+              <Link href="/fleet" className="nav-link font-montserrat font-medium text-lg">Fleet</Link>
+              <Link href="/destinations" className="nav-link font-montserrat font-medium text-lg">Destinations</Link>
+              <Link href="/about" className="nav-link font-montserrat font-medium text-lg">About</Link>
+              <Link href="/contact" className="nav-link font-montserrat font-medium text-lg">Contact</Link>
+              <Link href="/request-quote" className="btn-primary text-lg">Request Quote</Link>
             </div>
           </div>
           
