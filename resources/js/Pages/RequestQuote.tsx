@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Head } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Plane, Users, Calendar, MapPin } from 'lucide-react';
 import { router } from '@inertiajs/react';
 import { toast } from 'react-hot-toast';
+import AirportService from '@/services/AirportService';
+import { Airport } from '@/data/airports';
 
 const steps = [
   { title: 'Trip Details', icon: Plane },
@@ -15,10 +17,18 @@ const steps = [
 export default function RequestQuote() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fromResults, setFromResults] = useState<Airport[]>([]);
+  const [toResults, setToResults] = useState<Airport[]>([]);
+  const [showFromDropdown, setShowFromDropdown] = useState(false);
+  const [showToDropdown, setShowToDropdown] = useState(false);
+  const fromRef = useRef<HTMLDivElement>(null);
+  const toRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     tripType: 'One Way',
     from: '',
     to: '',
+    fromAirport: null as Airport | null,
+    toAirport: null as Airport | null,
     passengers: '',
     aircraftCategory: '',
     specialRequirements: '',
@@ -33,12 +43,60 @@ export default function RequestQuote() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (fromRef.current && !fromRef.current.contains(event.target as Node)) {
+        setShowFromDropdown(false);
+      }
+      if (toRef.current && !toRef.current.contains(event.target as Node)) {
+        setShowToDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    
+    if (name === 'from' || name === 'to') {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+        [`${name}Airport`]: null
+      }));
+
+      // Aggiorna i risultati della ricerca
+      if (name === 'from') {
+        const results = AirportService.searchAirports(value);
+        setFromResults(results);
+        setShowFromDropdown(true);
+      } else {
+        const results = AirportService.searchAirports(value);
+        setToResults(results);
+        setShowToDropdown(true);
+      }
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
+
+  const handleSelectAirport = (airport: Airport, type: 'from' | 'to') => {
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [type]: AirportService.formatAirportDisplay(airport),
+      [`${type}Airport`]: airport
     }));
+    
+    if (type === 'from') {
+      setShowFromDropdown(false);
+    } else {
+      setShowToDropdown(false);
+    }
   };
 
   const validateStep = (step: number): boolean => {
@@ -126,7 +184,19 @@ export default function RequestQuote() {
 
     setIsSubmitting(true);
 
-    router.post('/quote-request', formData, {
+    // Prepara i dati per l'invio, escludendo gli oggetti Airport completi
+    const submitData = {
+      ...formData,
+      from: formData.from,
+      to: formData.to,
+      fromIata: formData.fromAirport?.iata || '',
+      toIata: formData.toAirport?.iata || '',
+      // Rimuoviamo gli oggetti Airport completi
+      fromAirport: undefined,
+      toAirport: undefined
+    };
+
+    router.post('/quote-request', submitData, {
       onSuccess: () => {
         toast.success('Quote request sent successfully! We will contact you soon.');
         setIsSubmitting(false);
@@ -135,6 +205,8 @@ export default function RequestQuote() {
           tripType: 'One Way',
           from: '',
           to: '',
+          fromAirport: null,
+          toAirport: null,
           passengers: '',
           aircraftCategory: '',
           specialRequirements: '',
@@ -224,15 +296,16 @@ export default function RequestQuote() {
                       <option>Round Trip</option>
                     </select>
                   </div>
-                  <div>
+                  <div ref={fromRef} className="relative">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Departure City
+                      Departure Airport
                     </label>
                     <input
                       type="text"
                       name="from"
                       value={formData.from}
                       onChange={handleInputChange}
+                      placeholder="Search by city, airport name or code"
                       className={`w-full px-4 py-3 rounded-md border ${
                         errors.from ? 'border-red-500' : 'border-gray-300'
                       } focus:outline-none focus:border-gold`}
@@ -240,22 +313,57 @@ export default function RequestQuote() {
                     {errors.from && (
                       <p className="text-red-500 text-sm mt-1">{errors.from}</p>
                     )}
+                    {showFromDropdown && fromResults.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg border border-gray-200">
+                        <ul className="py-1 max-h-60 overflow-auto">
+                          {fromResults.map((airport) => (
+                            <li
+                              key={airport.id}
+                              onClick={() => handleSelectAirport(airport, 'from')}
+                              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            >
+                              <div className="font-medium">{airport.city} ({airport.iata})</div>
+                              <div className="text-sm text-gray-600">{airport.name}</div>
+                              <div className="text-xs text-gray-500">{airport.country}</div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                  <div>
+                  <div ref={toRef} className="relative">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Destination City
+                      Destination Airport
                     </label>
                     <input
                       type="text"
                       name="to"
                       value={formData.to}
                       onChange={handleInputChange}
+                      placeholder="Search by city, airport name or code"
                       className={`w-full px-4 py-3 rounded-md border ${
                         errors.to ? 'border-red-500' : 'border-gray-300'
                       } focus:outline-none focus:border-gold`}
                     />
                     {errors.to && (
                       <p className="text-red-500 text-sm mt-1">{errors.to}</p>
+                    )}
+                    {showToDropdown && toResults.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg border border-gray-200">
+                        <ul className="py-1 max-h-60 overflow-auto">
+                          {toResults.map((airport) => (
+                            <li
+                              key={airport.id}
+                              onClick={() => handleSelectAirport(airport, 'to')}
+                              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            >
+                              <div className="font-medium">{airport.city} ({airport.iata})</div>
+                              <div className="text-sm text-gray-600">{airport.name}</div>
+                              <div className="text-xs text-gray-500">{airport.country}</div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
                   </div>
                 </div>
