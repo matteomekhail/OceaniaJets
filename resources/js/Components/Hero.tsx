@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, ChevronRight, Plane, Users } from 'lucide-react';
+import { ArrowRight, ChevronRight, Plane, Users, User, Mail, Phone } from 'lucide-react';
 import { router, Link } from '@inertiajs/react';
 import { toast } from 'react-hot-toast';
 import AirportService from '@/services/AirportService';
@@ -13,6 +13,9 @@ const Hero: React.FC = () => {
   const [showFromDropdown, setShowFromDropdown] = useState<boolean>(false);
   const [showToDropdown, setShowToDropdown] = useState<boolean>(false);
   const [passengers, setPassengers] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [selectedFromAirport, setSelectedFromAirport] = useState<Airport | null>(null);
@@ -79,6 +82,20 @@ const Hero: React.FC = () => {
       newErrors.passengers = 'Number of passengers is required';
     }
 
+    if (!name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    if (!email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (!phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -99,6 +116,9 @@ const Hero: React.FC = () => {
       fromIata: selectedFromAirport?.iata || '',
       toIata: selectedToAirport?.iata || '',
       passengers: passengers,
+      name: name,
+      email: email,
+      phone: phone,
     }, {
       onSuccess: () => {
         toast.success('Quote request sent successfully! We will contact you soon.');
@@ -106,6 +126,9 @@ const Hero: React.FC = () => {
         setFromQuery('');
         setToQuery('');
         setPassengers('');
+        setName('');
+        setEmail('');
+        setPhone('');
         setSelectedFromAirport(null);
         setSelectedToAirport(null);
         setErrors({});
@@ -230,10 +253,59 @@ const Hero: React.FC = () => {
                   </select>
                 </div>
 
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-white/70 group-hover:text-gold transition-all duration-300 ease-out" />
+                  </div>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your Name"
+                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                      errors.name ? 'border-red-500' : 'border-transparent'
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5 text-white/70 group-hover:text-gold transition-all duration-300 ease-out" />
+                  </div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Your Email"
+                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                      errors.email ? 'border-red-500' : 'border-transparent'
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                  />
+                </div>
+
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Phone className="h-5 w-5 text-white/70 group-hover:text-gold transition-all duration-300 ease-out" />
+                  </div>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Your Phone"
+                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                      errors.phone ? 'border-red-500' : 'border-transparent'
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end">
                 <button 
                   type="submit"
                   disabled={isLoading}
-                  className="relative group overflow-hidden bg-gold text-navy font-montserrat font-semibold rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-gold/30 flex items-center justify-center gap-2 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto px-8 relative group overflow-hidden bg-gold text-navy font-montserrat font-semibold rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-gold/30 flex items-center justify-center gap-2 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span className="relative z-10 flex items-center gap-2 group-hover:translate-x-1 transition-all duration-300">
                     {isLoading ? (
@@ -252,6 +324,9 @@ const Hero: React.FC = () => {
                 {errors.from && <p>{errors.from}</p>}
                 {errors.to && <p>{errors.to}</p>}
                 {errors.passengers && <p>{errors.passengers}</p>}
+                {errors.name && <p>{errors.name}</p>}
+                {errors.email && <p>{errors.email}</p>}
+                {errors.phone && <p>{errors.phone}</p>}
               </div>
             </form>
           </div>
