@@ -10,7 +10,7 @@ const fleetCategories = [
     models: [
       {
         name: 'Citation CJ4',
-        image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&q=80&w=800',
+        image: 'https://globaljet.aero/sites/default/files/2021-01/Cessna%20Citation%20CJ4%20Exterior.jpg',
         specs: {
           passengers: 7,
           range: '2,165 nm',
@@ -22,7 +22,7 @@ const fleetCategories = [
       },
       {
         name: 'Phenom 300',
-        image: 'https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&fit=crop&q=80&w=800',
+        image: 'https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img/https://kulljet.aero/wp-content/uploads/2022/08/6cfa948f2c58322c3a4ff7a497c1e568-700.jpg',
         specs: {
           passengers: 8,
           range: '2,010 nm',
@@ -39,7 +39,7 @@ const fleetCategories = [
     models: [
       {
         name: 'Citation XLS+',
-        image: 'https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?auto=format&fit=crop&q=80&w=800',
+        image: 'https://www.vistajet.com/globalassets/images/aircraft/citation-xls/sunset.jpg?width=1080&quality=80&upscale=false',
         specs: {
           passengers: 9,
           range: '2,100 nm',
@@ -56,7 +56,7 @@ const fleetCategories = [
     models: [
       {
         name: 'Gulfstream G650',
-        image: 'https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&fit=crop&q=80&w=800',
+        image: 'https://assets.skiesmag.com/wp-content/uploads/2024/05/Gulfstream-G650-Program-Surpasses-1M-Flight-Hours.20240516.jpg',
         specs: {
           passengers: 14,
           range: '7,000 nm',

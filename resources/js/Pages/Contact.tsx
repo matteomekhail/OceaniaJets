@@ -138,27 +138,14 @@ export default function Contact() {
                     <Phone className="h-6 w-6 text-gold flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold mb-2">Phone</h3>
-                      <p className="text-gray-600">+1 (555) 123-4567</p>
-                      <p className="text-gray-600">+1 (555) 987-6543</p>
+                      <p className="text-gray-600">+61 450 770 286</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
                     <Mail className="h-6 w-6 text-gold flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold mb-2">Email</h3>
-                      <p className="text-gray-600">contact@oceania-airlines.com</p>
-                      <p className="text-gray-600">charter@oceania-airlines.com</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <MapPin className="h-6 w-6 text-gold flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold mb-2">Address</h3>
-                      <p className="text-gray-600">
-                        123 Aviation Way<br />
-                        Sydney, NSW 2000<br />
-                        Australia
-                      </p>
+                      <p className="text-gray-600">info@mcmprogroup.com</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">

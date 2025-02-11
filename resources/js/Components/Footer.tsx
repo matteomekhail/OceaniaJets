@@ -34,11 +34,11 @@ export default function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2">
                 <Phone className="h-5 w-5 text-gold" />
-                <span>+1 (555) 123-4567</span>
+                <span>+61 450 770 286</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-5 w-5 text-gold" />
-                <span>contact@oceania-airlines.com</span>
+                <span>info@mcmprogroup.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-gold" />

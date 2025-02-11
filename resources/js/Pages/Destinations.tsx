@@ -6,7 +6,7 @@ import MainLayout from '@/Layouts/MainLayout';
 const destinations = [
   {
     name: 'Bora Bora',
-    image: 'https://images.unsplash.com/photo-1589179447852-768772012adc?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1589197331516-4d84b72ebde3?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description: 'Experience paradise in the South Pacific with crystal clear waters and luxurious overwater bungalows.',
     flightTime: '8 hours',
     bestSeason: 'May to October',
@@ -30,7 +30,7 @@ const destinations = [
   },
   {
     name: 'Fiji',
-    image: 'https://images.unsplash.com/photo-1589179447852-768772012adc?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1575000898743-9128b75a89b7?q=80&w=2826&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description: 'Escape to a tropical paradise of pristine beaches and world-class resorts.',
     flightTime: '5 hours',
     bestSeason: 'July to September',
@@ -38,7 +38,7 @@ const destinations = [
   },
   {
     name: 'Great Barrier Reef',
-    image: 'https://images.unsplash.com/photo-1582067294834-67e14d10a9f6?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description: 'Experience the world\'s largest coral reef system from a unique perspective.',
     flightTime: '4 hours',
     bestSeason: 'June to October',
@@ -111,44 +111,56 @@ export default function Destinations() {
         {/* Destinations Grid */}
         <section className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="section-title text-center mb-12">Featured Destinations</h2>
+            <h2 className="text-4xl font-playfair font-semibold text-center mb-16">Featured Destinations</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {destinations.map((destination, index) => (
-                <div key={index} className="group cursor-pointer">
-                  <div className="relative overflow-hidden rounded-lg shadow-lg">
+                <div key={index} className="group relative bg-gradient-to-b from-white to-gray-50 rounded-3xl shadow-lg overflow-hidden">
+                  <div className="relative h-[400px] w-full">
                     <img
                       src={destination.image}
                       alt={destination.name}
-                      className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy/90 to-transparent">
-                      <div className="absolute bottom-0 p-6 w-full">
-                        <div className="flex items-center gap-2 text-white mb-2">
-                          <MapPin className="h-5 w-5 text-gold" />
-                          <h3 className="text-xl font-playfair">{destination.name}</h3>
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70"></div>
+                    
+                    {/* Content Overlay */}
+                    <div className="absolute inset-0 p-8 flex flex-col justify-between">
+                      {/* Header */}
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">
+                          <MapPin className="h-3 w-3 text-gold" />
                         </div>
-                        <p className="text-white/90 mb-4">{destination.description}</p>
+                        <h3 className="text-2xl font-playfair text-white">{destination.name}</h3>
+                      </div>
+
+                      {/* Description */}
+                      <div className="space-y-6">
+                        <p className="text-white/90 text-lg leading-relaxed">
+                          {destination.description}
+                        </p>
+
+                        {/* Flight Info */}
                         <div className="space-y-2">
-                          <p className="text-white/80 flex items-center gap-2">
+                          <div className="flex items-center gap-2 text-white/80">
                             <Plane className="h-4 w-4 text-gold" />
-                            Flight Time: {destination.flightTime}
-                          </p>
-                          <p className="text-white/80 flex items-center gap-2">
-                            <Calendar className="h-4 w-4 text-gold" />
-                            Best Season: {destination.bestSeason}
-                          </p>
-                        </div>
-                        <div className="mt-4 pt-4 border-t border-white/20">
-                          <div className="flex flex-wrap gap-2">
-                            {destination.highlights.map((highlight, i) => (
-                              <span
-                                key={i}
-                                className="text-sm bg-white/10 text-white/90 px-3 py-1 rounded-full"
-                              >
-                                {highlight}
-                              </span>
-                            ))}
+                            <span className="text-sm">Flight Time: {destination.flightTime}</span>
                           </div>
+                          <div className="flex items-center gap-2 text-white/80">
+                            <Calendar className="h-4 w-4 text-gold" />
+                            <span className="text-sm">Best Season: {destination.bestSeason}</span>
+                          </div>
+                        </div>
+
+                        {/* Highlights */}
+                        <div className="flex flex-wrap gap-2">
+                          {destination.highlights.map((highlight, i) => (
+                            <span
+                              key={i}
+                              className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm text-white/90"
+                            >
+                              {highlight}
+                            </span>
+                          ))}
                         </div>
                       </div>
                     </div>

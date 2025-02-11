@@ -4,7 +4,7 @@ import { MapPin } from 'lucide-react';
 const destinations = [
   {
     name: 'Bora Bora',
-    image: 'https://images.unsplash.com/photo-1589179447852-768772012adc?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1589197331516-4d84b72ebde3?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description: 'Paradise in the South Pacific',
   },
   {
@@ -19,7 +19,7 @@ const destinations = [
   },
   {
     name: 'Fiji',
-    image: 'https://images.unsplash.com/photo-1589179447852-768772012adc?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1575000898743-9128b75a89b7?q=80&w=2826&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description: 'Tropical Paradise Islands',
   },
 ];
