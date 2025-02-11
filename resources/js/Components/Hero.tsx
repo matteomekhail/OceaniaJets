@@ -165,7 +165,7 @@ const Hero: React.FC = () => {
 
         {/* Search Form */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 sm:p-8 shadow-2xl border border-white/20 animate-slide-up">
+          <div className="bg-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl border border-white/20 animate-slide-up">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="relative group" ref={fromRef}>
@@ -180,10 +180,10 @@ const Hero: React.FC = () => {
                     placeholder="From"
                     className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.from ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg hover:bg-white/20 appearance-none`}
                   />
                   {showFromDropdown && fromResults.length > 0 && (
-                    <div className="absolute z-50 w-full mt-2 bg-navy/95 backdrop-blur-xl rounded-lg shadow-2xl border border-white/10 animate-fade-in">
+                    <div className="absolute z-50 w-full mt-2 bg-navy/95 rounded-lg shadow-2xl border border-white/10 animate-fade-in">
                       <ul className="max-h-60 overflow-auto">
                         {fromResults.map((airport) => (
                           <li
@@ -212,10 +212,10 @@ const Hero: React.FC = () => {
                     placeholder="To"
                     className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.to ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg hover:bg-white/20 appearance-none`}
                   />
                   {showToDropdown && toResults.length > 0 && (
-                    <div className="absolute z-50 w-full mt-2 bg-navy/95 backdrop-blur-xl rounded-lg shadow-2xl border border-white/10 animate-fade-in">
+                    <div className="absolute z-50 w-full mt-2 bg-navy/95 rounded-lg shadow-2xl border border-white/10 animate-fade-in">
                       <ul className="max-h-60 overflow-auto">
                         {toResults.map((airport) => (
                           <li
@@ -243,7 +243,7 @@ const Hero: React.FC = () => {
                     onChange={(e) => setPassengers(e.target.value)}
                     className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.passengers ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none appearance-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                    } focus:border-gold transition-all duration-300 outline-none appearance-none font-montserrat rounded-lg hover:bg-white/20`}
                   >
                     <option value="" className="bg-navy text-white">Select Passengers</option>
                     <option value="1-3" className="bg-navy text-white">1-3 Passengers</option>
@@ -264,7 +264,7 @@ const Hero: React.FC = () => {
                     placeholder="Your Name"
                     className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.name ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg hover:bg-white/20 appearance-none`}
                   />
                 </div>
               </div>
@@ -281,7 +281,7 @@ const Hero: React.FC = () => {
                     placeholder="Your Email"
                     className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.email ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg hover:bg-white/20 appearance-none`}
                   />
                 </div>
 
@@ -296,7 +296,7 @@ const Hero: React.FC = () => {
                     placeholder="Your Phone"
                     className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.phone ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg hover:bg-white/20 appearance-none`}
                   />
                 </div>
               </div>
