@@ -178,9 +178,9 @@ const Hero: React.FC = () => {
                     onChange={(e) => handleInputChange(e, 'from')}
                     onFocus={() => setShowFromDropdown(true)}
                     placeholder="From"
-                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                    className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.from ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
                   />
                   {showFromDropdown && fromResults.length > 0 && (
                     <div className="absolute z-50 w-full mt-2 bg-navy/95 backdrop-blur-xl rounded-lg shadow-2xl border border-white/10 animate-fade-in">
@@ -210,9 +210,9 @@ const Hero: React.FC = () => {
                     onChange={(e) => handleInputChange(e, 'to')}
                     onFocus={() => setShowToDropdown(true)}
                     placeholder="To"
-                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                    className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.to ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
                   />
                   {showToDropdown && toResults.length > 0 && (
                     <div className="absolute z-50 w-full mt-2 bg-navy/95 backdrop-blur-xl rounded-lg shadow-2xl border border-white/10 animate-fade-in">
@@ -241,7 +241,7 @@ const Hero: React.FC = () => {
                   <select 
                     value={passengers}
                     onChange={(e) => setPassengers(e.target.value)}
-                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                    className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.passengers ? 'border-red-500' : 'border-transparent'
                     } focus:border-gold transition-all duration-300 outline-none appearance-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
                   >
@@ -262,9 +262,9 @@ const Hero: React.FC = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your Name"
-                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                    className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.name ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
                   />
                 </div>
               </div>
@@ -279,9 +279,9 @@ const Hero: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Your Email"
-                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                    className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.email ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
                   />
                 </div>
 
@@ -294,9 +294,9 @@ const Hero: React.FC = () => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="Your Phone"
-                    className={`w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/60 border-b-2 ${
+                    className={`w-full pl-12 pr-4 py-3 sm:py-4 bg-white/10 text-white text-base sm:text-sm placeholder-white/60 border-b-2 ${
                       errors.phone ? 'border-red-500' : 'border-transparent'
-                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20`}
+                    } focus:border-gold transition-all duration-300 outline-none font-montserrat rounded-lg backdrop-blur-sm hover:bg-white/20 appearance-none`}
                   />
                 </div>
               </div>
