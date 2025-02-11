@@ -124,9 +124,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <Testimonials />
-
       {/* CTA Section */}
       <section className="py-20 bg-navy text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
